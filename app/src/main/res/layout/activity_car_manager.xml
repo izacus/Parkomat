@@ -5,12 +5,14 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="si.virag.parkomat.CarManagerActivity">
+    tools:context="si.virag.parkomat.activities.CarManagerActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/carmanager_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+
+        tools:listitem="@layout/item_car" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/carmanager_add"
