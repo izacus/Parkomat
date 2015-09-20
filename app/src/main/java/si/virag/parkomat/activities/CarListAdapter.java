@@ -47,6 +47,11 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.ViewHold
         return cars.get(position).id;
     }
 
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+        notifyDataSetChanged();
+    }
+
     public interface OnCarClickedListener {
         void onCarClicked(Car car, int position);
     }
@@ -67,6 +72,10 @@ public class CarListAdapter extends RecyclerView.Adapter<CarListAdapter.ViewHold
         public void onClick(View v) {
             Car c = cars.get(getAdapterPosition());
             listener.onCarClicked(c, getAdapterPosition());
+        }
+
+        public Car getCar() {
+            return cars.get(getAdapterPosition());
         }
     }
 }

@@ -6,6 +6,10 @@ import android.app.Application;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
+import javax.inject.Inject;
+
+import si.virag.parkomat.models.CarsManager;
+
 public class ParkomatApplication extends Application {
 
     public static ParkomatComponent get(Activity ctx) {
@@ -13,6 +17,9 @@ public class ParkomatApplication extends Application {
     }
 
     private ParkomatComponent component;
+
+    @Inject
+    CarsManager carsManager;
 
     @Override
     public void onCreate() {
@@ -23,6 +30,8 @@ public class ParkomatApplication extends Application {
         component = DaggerParkomatComponent.builder()
                     .parkomatApplicationModule(new ParkomatApplicationModule(this))
                     .build();
+        component.inject(this);
+        carsManager.pruneCarsAsync();
     }
 
     public ParkomatComponent getComponent() {

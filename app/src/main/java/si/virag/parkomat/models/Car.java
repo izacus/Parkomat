@@ -17,4 +17,7 @@ public class Car extends BaseModel {
 
     @Column
     public String registrationPlate;
+
+    @Column
+    public boolean deleted;
 }
