@@ -5,15 +5,42 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import rx.Observer;
+import si.virag.parkomat.ParkomatApplication;
 import si.virag.parkomat.R;
+import si.virag.parkomat.models.Car;
+import si.virag.parkomat.models.CarsManager;
 
 public class MainActivity extends AppCompatActivity {
+
+    @Bind(R.id.main_registration_plate)
+    TextView registrationPlate;
+
+    @Bind(R.id.main_car_name)
+    TextView carName;
+
+    @Inject
+    CarsManager carsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
+        ParkomatApplication.get(this).inject(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showCar(0);
     }
 
     @Override
@@ -38,5 +65,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void showCar(int index) {
+        carsManager.getCars().elementAt(index).single().subscribe(new Observer<Car>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Car car) {
+                carName.setText(car.name);
+                registrationPlate.setText(car.registrationPlate);
+            }
+        });
     }
 }

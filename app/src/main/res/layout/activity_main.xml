@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,4 +7,104 @@
     android:layout_height="match_parent"
     >
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/main_car_selection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/main_registration_plate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="48sp"
+            android:gravity="bottom|left"
+            android:includeFontPadding="false"
+            tools:text="LJ AA-555"
+            style="@style/TextAppearance.AppCompat.Headline"
+            />
+
+        <TextView
+            android:id="@+id/main_car_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:textColor="@color/colorAccent"
+            android:includeFontPadding="false"
+            tools:text="Brand Model 999"
+            style="@style/TextAppearance.AppCompat.Caption"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:orientation="horizontal"
+            >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|left"
+                    android:textColor="@color/colorAccent"
+                    android:includeFontPadding="false"
+                    android:text="Cona"
+                    style="@style/TextAppearance.AppCompat.Caption"
+                    />
+
+                <Spinner
+                    android:id="@+id/main_parking_zones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|left"
+                    android:textColor="@color/colorAccent"
+                    android:includeFontPadding="false"
+                    android:text="Parkiranje do"
+                    style="@style/TextAppearance.AppCompat.Caption"
+                    />
+
+                <TextView
+                    android:id="@+id/main_parking_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="32sp"
+                    tools:text="13:55"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
