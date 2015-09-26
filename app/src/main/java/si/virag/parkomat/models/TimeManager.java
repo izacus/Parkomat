@@ -44,10 +44,7 @@ public class TimeManager {
                         LocalTime instant = LocalTime.now()
                                                      .with(ChronoField.HOUR_OF_DAY, hourOfDay)
                                                      .with(ChronoField.MINUTE_OF_HOUR, minute);
-
-                        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), instant);
-                        int hours = (int)Math.ceil(diffMinutes / 60.0);
-                        subscriber.onNext(LocalTime.now().plus(hours, ChronoUnit.HOURS));
+                        subscriber.onNext(instant);
                     }
                 };
 

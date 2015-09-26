@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
     @State
     LocalTime currentlySelectedTime;
 
+    @State
+    int calculatedHoursToPay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,14 +118,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTime(@NonNull LocalTime time) {
-        SpannableStringBuilder string = new SpannableStringBuilder(timeFormatter.format(time));
-        int hourDifference = (int)Math.ceil(ChronoUnit.MINUTES.between(LocalTime.now(), time) / 60.0);
-        String hourDifferenceString = "(" + hourDifference + " ur)";
+        currentlySelectedTime = time;
+
+        // Normalize time to max hours
+        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), time);
+        int hours = (int)Math.ceil(diffMinutes / 60.0);
+        int maxHoursInZone = zoneManager.maxHoursForZone(currentlySelectedZone);
+        calculatedHoursToPay = Math.min(maxHoursInZone, hours);
+
+        LocalTime timeToDisplay = LocalTime.now().plus(calculatedHoursToPay, ChronoUnit.HOURS);
+
+        SpannableStringBuilder string = new SpannableStringBuilder(timeFormatter.format(timeToDisplay));
+        String hourDifferenceString = "(" + (calculatedHoursToPay == maxHoursInZone ? "max " : "") + calculatedHoursToPay + " ur)";
         string.append(hourDifferenceString);
         string.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        string.setSpan(new AbsoluteSizeSpan(16, true), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        string.setSpan(new AbsoluteSizeSpan(14, true), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         timeName.setText(string);
-        currentlySelectedTime = time;
     }
 
     private void showCar(int index) {
@@ -151,6 +162,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void call(LocalTime instant) {
                 setTime(instant);
+            }
+        });
+    }
+
+    @OnClick(R.id.main_parking_zone)
+    public void onParkingZoneClick() {
+        zoneManager.pickZone(this, currentlySelectedZone).subscribe(new Action1<String>() {
+            @Override
+            public void call(String selectedZone) {
+                setZone(selectedZone);
+                setTime(currentlySelectedTime);
             }
         });
     }
