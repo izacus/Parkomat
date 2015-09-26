@@ -8,7 +8,7 @@
     >
 
     <LinearLayout
-        android:id="@+id/main_car_selection"
+        android:id="@+id/main_top_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="130dp"
@@ -66,10 +66,12 @@
                     style="@style/TextAppearance.AppCompat.Caption"
                     />
 
-                <Spinner
-                    android:id="@+id/main_parking_zones"
+                <TextView
+                    android:id="@+id/main_parking_zone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="32sp"
+                    tools:text="B2"
                     />
 
             </LinearLayout>
@@ -103,6 +105,23 @@
             </LinearLayout>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Plačaj"
+            />
 
     </LinearLayout>
 

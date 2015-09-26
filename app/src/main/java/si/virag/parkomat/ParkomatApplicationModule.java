@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import si.virag.parkomat.models.CarsManager;
+import si.virag.parkomat.models.ZoneManager;
 
 @Module
 public class ParkomatApplicationModule {
@@ -23,5 +24,8 @@ public class ParkomatApplicationModule {
         return new CarsManager(applicationContext);
     }
 
+    @Provides
+    @Singleton
+    public ZoneManager provideZoneManager() { return new ZoneManager(applicationContext); }
 
 }
