@@ -3,6 +3,7 @@ package si.virag.parkomat;
 import android.app.Activity;
 import android.app.Application;
 
+import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
@@ -26,6 +27,7 @@ public class ParkomatApplication extends Application {
         super.onCreate();
         FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);
         FlowManager.init(this);
+        AndroidThreeTen.init(this);
 
         component = DaggerParkomatComponent.builder()
                     .parkomatApplicationModule(new ParkomatApplicationModule(this))

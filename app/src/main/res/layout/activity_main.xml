@@ -49,11 +49,15 @@
             >
 
             <LinearLayout
+                android:id="@+id/main_parking_zone"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:orientation="vertical"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?selectableItemBackgroundBorderless"
                 >
 
                 <TextView
@@ -67,7 +71,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/main_parking_zone"
+                    android:id="@+id/main_parking_zone_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"
@@ -82,6 +86,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:orientation="vertical"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?selectableItemBackgroundBorderless"
                 >
 
                 <TextView
@@ -95,7 +102,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/main_parking_time"
+                    android:id="@+id/main_parking_time_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="32sp"

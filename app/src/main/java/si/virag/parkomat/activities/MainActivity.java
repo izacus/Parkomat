@@ -8,6 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -19,9 +24,12 @@ import si.virag.parkomat.ParkomatApplication;
 import si.virag.parkomat.R;
 import si.virag.parkomat.models.Car;
 import si.virag.parkomat.models.CarsManager;
+import si.virag.parkomat.models.TimeManager;
 import si.virag.parkomat.models.ZoneManager;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.systemDefault());
 
     @Bind(R.id.main_registration_plate)
     TextView registrationPlate;
@@ -29,8 +37,11 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.main_car_name)
     TextView carName;
 
-    @Bind(R.id.main_parking_zone)
+    @Bind(R.id.main_parking_zone_txt)
     TextView zoneName;
+
+    @Bind(R.id.main_parking_time_txt)
+    TextView timeName;
 
     @Inject
     CarsManager carsManager;
@@ -38,8 +49,14 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     ZoneManager zoneManager;
 
+    @Inject
+    TimeManager timeManager;
+
     @State
     String currentlySelectedZone;
+
+    @State
+    Instant currentlySelectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         ParkomatApplication.get(this).inject(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
         setZone(zoneManager.lastSelectedZone());
+        setTime(timeManager.initialDisplayedTime());
     }
 
     @Override
@@ -87,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
         currentlySelectedZone = zone;
     }
 
+    private void setTime(@NonNull Instant time) {
+        timeName.setText(timeFormatter.format(time));
+        currentlySelectedTime = time;
+    }
 
     private void showCar(int index) {
         carsManager.getCars().elementAt(index).single().subscribe(new Observer<Car>() {
