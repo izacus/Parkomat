@@ -11,6 +11,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.threeten.bp.Instant;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.main_parking_time_txt)
     TextView timeName;
+
+    @Bind(R.id.main_button_pay)
+    Button payButton;
 
     @Inject
     CarsManager carsManager;
@@ -115,25 +119,25 @@ public class MainActivity extends AppCompatActivity {
     private void setZone(@NonNull String zone) {
         zoneName.setText(zone);
         currentlySelectedZone = zone;
+        updatePriceOnButton();
     }
 
     private void setTime(@NonNull LocalTime time) {
+        if (currentlySelectedZone == null) throw new IllegalStateException("Need to know zone before setting time.");
         currentlySelectedTime = time;
 
         // Normalize time to max hours
-        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), time);
-        int hours = (int)Math.ceil(diffMinutes / 60.0);
-        int maxHoursInZone = zoneManager.maxHoursForZone(currentlySelectedZone);
-        calculatedHoursToPay = Math.min(maxHoursInZone, hours);
+        calculatedHoursToPay = zoneManager.getValidHoursToPayFromThisMoment(time, currentlySelectedZone);
 
         LocalTime timeToDisplay = LocalTime.now().plus(calculatedHoursToPay, ChronoUnit.HOURS);
 
         SpannableStringBuilder string = new SpannableStringBuilder(timeFormatter.format(timeToDisplay));
-        String hourDifferenceString = "(" + (calculatedHoursToPay == maxHoursInZone ? "max " : "") + calculatedHoursToPay + " ur)";
+        String hourDifferenceString = "(" + (calculatedHoursToPay == zoneManager.maxHoursForZone(currentlySelectedZone) ? "max " : "") + calculatedHoursToPay + " ur)";
         string.append(hourDifferenceString);
         string.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         string.setSpan(new AbsoluteSizeSpan(14, true), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         timeName.setText(string);
+        updatePriceOnButton();
     }
 
     private void showCar(int index) {
@@ -156,6 +160,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void updatePriceOnButton() {
+        payButton.setText("Plačaj (" + zoneManager.getPriceForZone(currentlySelectedZone, calculatedHoursToPay) + " €)");
+    }
+
     @OnClick(R.id.main_parking_time)
     public void onParkingTimeClick() {
         timeManager.pickTime(this, currentlySelectedTime).subscribe(new Action1<LocalTime>() {
@@ -168,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.main_parking_zone)
     public void onParkingZoneClick() {
-        zoneManager.pickZone(this, currentlySelectedZone).subscribe(new Action1<String>() {
+        zoneManager.pickZone(this).subscribe(new Action1<String>() {
             @Override
             public void call(String selectedZone) {
                 setZone(selectedZone);

@@ -11,9 +11,16 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
+import com.raizlabs.android.dbflow.config.NaturalOrderComparator;
+
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import rx.Observable;
@@ -31,7 +38,11 @@ public class ZoneManager {
     @NonNull
     private final SharedPreferences preferences;
 
+    @NonNull
     private ZoneInformation zoneInformation;
+
+    @NonNull
+    private String[] zoneNames;
 
     public ZoneManager(@NonNull Context context) {
         this.appContext = context;
@@ -46,18 +57,22 @@ public class ZoneManager {
             GZIPInputStream inputStream = new GZIPInputStream(appContext.getAssets().open("data"));
             Gson gson = new Gson();
             zoneInformation = gson.fromJson(new InputStreamReader(inputStream), ZoneInformation.class);
+
+            List<String> zoneNames = new ArrayList<>(zoneInformation.zones.keySet());
+            Collections.sort(zoneNames, new NaturalOrderComparator());
+            this.zoneNames = zoneNames.toArray(new String[zoneNames.size()]);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Could not load zone data!", e);
         }
     }
 
-    public Observable<String> pickZone(final Activity owner, String currentZone) {
+    public Observable<String> pickZone(final Activity owner) {
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
                 new MaterialDialog.Builder(owner)
                         .title("Izberi cono")
-                        .items(zoneInformation.zones.keySet().toArray(new String[zoneInformation.zones.size()]))
+                        .items(zoneNames)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
@@ -75,6 +90,18 @@ public class ZoneManager {
                         .show();
             }
         });
+    }
+
+    public int getValidHoursToPayFromThisMoment(LocalTime desiredTimeToPayTo, String zone) {
+        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), desiredTimeToPayTo);
+        int hours = (int)Math.ceil(diffMinutes / 60.0);
+        int maxHoursInZone = maxHoursForZone(zone);
+        return Math.min(hours, maxHoursInZone);
+    }
+
+    public float getPriceForZone(@NonNull String zoneName, int hours) {
+        Zone zone = zoneInformation.zones.get(zoneName);
+        return zoneInformation.zoneTypes.get(zone.zoneType).pricePerHour * hours;
     }
 
     public int maxHoursForZone(@NonNull String zoneName) {
