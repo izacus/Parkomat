@@ -48,6 +48,9 @@ dependencies {
     // Needed specifically for annotations in Java 1.6
     compile 'org.glassfish:javax.annotation:10.0-b28'
 
+    // Data load
+    compile 'com.google.code.gson:gson:2.3.1'
+
     // Offline database
     apt 'com.raizlabs.android:DBFlow-Compiler:2.2.1'
     compile "com.raizlabs.android:DBFlow-Core:2.2.1"
