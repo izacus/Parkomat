@@ -1,10 +1,22 @@
 package si.virag.parkomat.models;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.threeten.bp.Instant;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.ChronoUnit;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Handles parking time related things
@@ -18,7 +30,40 @@ public class TimeManager {
         this.appContext = applicationContext;
     }
 
-    public Instant initialDisplayedTime() {
-        return Instant.now().plus(1, ChronoUnit.HOURS);
+    public LocalTime initialDisplayedTime() {
+        return LocalTime.now().plus(1, ChronoUnit.HOURS);
     }
+
+    public Observable<LocalTime> pickTime(@NonNull final Activity owner, @NonNull final LocalTime currentlySelected) {
+        return Observable.create(new Observable.OnSubscribe<LocalTime>() {
+            @Override
+            public void call(final Subscriber<? super LocalTime> subscriber) {
+                TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+                        LocalTime instant = LocalTime.now()
+                                                     .with(ChronoField.HOUR_OF_DAY, hourOfDay)
+                                                     .with(ChronoField.MINUTE_OF_HOUR, minute);
+
+                        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), instant);
+                        int hours = (int)Math.ceil(diffMinutes / 60.0);
+                        subscriber.onNext(LocalTime.now().plus(hours, ChronoUnit.HOURS));
+                    }
+                };
+
+                DialogInterface.OnDismissListener dismissListener = new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        subscriber.onCompleted();
+                    }
+                };
+
+                TimePickerDialog dialog = TimePickerDialog.newInstance(listener, currentlySelected.get(ChronoField.HOUR_OF_DAY), currentlySelected.get(ChronoField.MINUTE_OF_HOUR), true);
+                dialog.setOnDismissListener(dismissListener);
+                dialog.show(owner.getFragmentManager(), "TimePicker");
+            }
+        });
+
+    }
+
 }

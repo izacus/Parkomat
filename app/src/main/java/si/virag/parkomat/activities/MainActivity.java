@@ -4,22 +4,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.threeten.bp.Instant;
+import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.FormatStyle;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 import rx.Observer;
+import rx.functions.Action1;
 import si.virag.parkomat.ParkomatApplication;
 import si.virag.parkomat.R;
 import si.virag.parkomat.models.Car;
@@ -29,7 +38,7 @@ import si.virag.parkomat.models.ZoneManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.systemDefault());
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm ").withZone(ZoneId.systemDefault());
 
     @Bind(R.id.main_registration_plate)
     TextView registrationPlate;
@@ -56,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     String currentlySelectedZone;
 
     @State
-    Instant currentlySelectedTime;
+    LocalTime currentlySelectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +114,14 @@ public class MainActivity extends AppCompatActivity {
         currentlySelectedZone = zone;
     }
 
-    private void setTime(@NonNull Instant time) {
-        timeName.setText(timeFormatter.format(time));
+    private void setTime(@NonNull LocalTime time) {
+        SpannableStringBuilder string = new SpannableStringBuilder(timeFormatter.format(time));
+        int hourDifference = (int)Math.ceil(ChronoUnit.MINUTES.between(LocalTime.now(), time) / 60.0);
+        String hourDifferenceString = "(" + hourDifference + " ur)";
+        string.append(hourDifferenceString);
+        string.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        string.setSpan(new AbsoluteSizeSpan(16, true), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        timeName.setText(string);
         currentlySelectedTime = time;
     }
 
@@ -126,6 +141,16 @@ public class MainActivity extends AppCompatActivity {
             public void onNext(Car car) {
                 carName.setText(car.name);
                 registrationPlate.setText(car.registrationPlate);
+            }
+        });
+    }
+
+    @OnClick(R.id.main_parking_time)
+    public void onParkingTimeClick() {
+        timeManager.pickTime(this, currentlySelectedTime).subscribe(new Action1<LocalTime>() {
+            @Override
+            public void call(LocalTime instant) {
+                setTime(instant);
             }
         });
     }
