@@ -1,4 +1,4 @@
-package si.virag.parkomat.models;
+package si.virag.parkomat.modules;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,6 +12,8 @@ import rx.Observer;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import si.virag.parkomat.models.Car;
+import si.virag.parkomat.models.Car$Table;
 
 
 /**

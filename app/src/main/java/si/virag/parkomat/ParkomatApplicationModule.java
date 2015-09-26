@@ -6,9 +6,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import si.virag.parkomat.models.CarsManager;
-import si.virag.parkomat.models.TimeManager;
-import si.virag.parkomat.models.ZoneManager;
+import si.virag.parkomat.modules.CarsManager;
+import si.virag.parkomat.modules.SmsHandler;
+import si.virag.parkomat.modules.TimeManager;
+import si.virag.parkomat.modules.ZoneManager;
 
 @Module
 public class ParkomatApplicationModule {
@@ -33,4 +34,7 @@ public class ParkomatApplicationModule {
     @Singleton
     public TimeManager provideTimeManager() { return new TimeManager(applicationContext); }
 
+    @Provides
+    @Singleton
+    public SmsHandler provideSmsHandler() { return new SmsHandler(applicationContext); }
 }

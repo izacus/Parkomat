@@ -1,6 +1,5 @@
 package si.virag.parkomat.activities;
 
-import android.media.MediaRouter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,7 +21,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -30,7 +28,7 @@ import rx.schedulers.Schedulers;
 import si.virag.parkomat.ParkomatApplication;
 import si.virag.parkomat.R;
 import si.virag.parkomat.models.Car;
-import si.virag.parkomat.models.CarsManager;
+import si.virag.parkomat.modules.CarsManager;
 
 public class CarManagerActivity extends AppCompatActivity implements CarListAdapter.OnCarClickedListener {
 

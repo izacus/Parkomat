@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
+import android.telephony.SmsManager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
@@ -14,11 +14,9 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.threeten.bp.Instant;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.FormatStyle;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import javax.inject.Inject;
@@ -33,9 +31,10 @@ import rx.functions.Action1;
 import si.virag.parkomat.ParkomatApplication;
 import si.virag.parkomat.R;
 import si.virag.parkomat.models.Car;
-import si.virag.parkomat.models.CarsManager;
-import si.virag.parkomat.models.TimeManager;
-import si.virag.parkomat.models.ZoneManager;
+import si.virag.parkomat.modules.CarsManager;
+import si.virag.parkomat.modules.SmsHandler;
+import si.virag.parkomat.modules.TimeManager;
+import si.virag.parkomat.modules.ZoneManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     TimeManager timeManager;
+
+    @Inject
+    SmsHandler smsHandler;
 
     @State
     String currentlySelectedZone;
@@ -181,6 +183,17 @@ public class MainActivity extends AppCompatActivity {
             public void call(String selectedZone) {
                 setZone(selectedZone);
                 setTime(currentlySelectedTime);
+            }
+        });
+    }
+
+    @OnClick(R.id.main_button_pay)
+    public void onParkingPayClick() {
+        String plateNormalized = registrationPlate.getText().toString().replaceAll("[^A-Za-z0-9]", "");
+        smsHandler.payForParking(currentlySelectedZone, plateNormalized, calculatedHoursToPay).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+
             }
         });
     }

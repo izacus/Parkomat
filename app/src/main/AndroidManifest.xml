@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="si.virag.parkomat" >
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +11,7 @@
         android:theme="@style/ParkomatTheme"
         android:name=".ParkomatApplication"
         >
+
 
         <activity android:name=".activities.MainActivity" >
             <intent-filter>

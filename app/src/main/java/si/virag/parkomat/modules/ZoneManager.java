@@ -1,4 +1,4 @@
-package si.virag.parkomat.models;
+package si.virag.parkomat.modules;
 
 import android.app.Activity;
 import android.content.Context;

@@ -9,7 +9,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 
 import javax.inject.Inject;
 
-import si.virag.parkomat.models.CarsManager;
+import si.virag.parkomat.modules.CarsManager;
 
 public class ParkomatApplication extends Application {
 
