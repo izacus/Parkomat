@@ -7,6 +7,8 @@ import android.util.Log;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import java.util.Locale;
+
 import rx.Observable;
 import rx.Observer;
 import rx.functions.Func0;
@@ -34,7 +36,7 @@ public class CarsManager {
             public Observable<Car> call() {
                 final Car car = new Car();
                 car.name = name;
-                car.registrationPlate = licensePlate;
+                car.registrationPlate = prettyfyPlateNumber(licensePlate);
                 car.save();
                 return Observable.just(car);
             }
@@ -70,6 +72,12 @@ public class CarsManager {
                 return Observable.empty();
             }
         });
+    }
+
+    public String prettyfyPlateNumber(@NonNull String plate) {
+        plate = plate.replaceAll("[^A-Za-z0-9]", "");
+        if (plate.length() != 7) return plate;
+        return String.format("%s %s-%s", plate.substring(0, 2), plate.substring(2, 4), plate.substring(4)).toUpperCase(Locale.GERMAN);
     }
 
     public void pruneCarsAsync() {
