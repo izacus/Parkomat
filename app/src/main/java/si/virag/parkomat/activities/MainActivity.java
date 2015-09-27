@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.main_button_pay)
     public void onParkingPayClick() {
         String plateNormalized = registrationPlate.getText().toString().replaceAll("[^A-Za-z0-9]", "");
-        smsHandler.payForParking(currentlySelectedZone, plateNormalized, calculatedHoursToPay).subscribe(new Action1<Void>() {
+        smsHandler.payForParking(this, currentlySelectedZone, plateNormalized, calculatedHoursToPay).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
 
