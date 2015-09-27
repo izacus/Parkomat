@@ -85,6 +85,8 @@
                     android:hint="@string/dialog_car_hint_name"
                     android:textColor="?android:textColorPrimaryInverse"
                     android:textColorHint="?android:textColorHintInverse"
+                    android:imeOptions="actionNext|flagForceAscii"
+                    android:singleLine="true"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -102,7 +104,11 @@
                     android:hint="@string/dialog_car_hint_plate"
                     android:textColor="?android:textColorPrimaryInverse"
                     android:textColorHint="?android:textColorHintInverse"
+                    android:singleLine="true"
+                    android:inputType="textVisiblePassword"
+                    android:imeOptions="actionDone"
                     />
+
             </android.support.design.widget.TextInputLayout>
 
             <View

@@ -19,7 +19,7 @@
         </activity>
         <activity android:name=".activities.CarManagerActivity" >
         </activity>
-        <activity android:name=".activities.WelcomeActivity" android:theme="@style/ParkomatTheme.NoActionBar" >
+        <activity android:name=".activities.WelcomeActivity" android:theme="@style/ParkomatTheme.NoActionBar" android:windowSoftInputMode="adjustPan" >
         </activity>
     </application>
 

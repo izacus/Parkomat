@@ -112,4 +112,8 @@ public class CarsManager {
             }
         });
     }
+
+    public boolean hasCars() {
+        return new Select().from(Car.class).where(Condition.column(Car$Table.DELETED).eq(false)).count() > 0;
+    }
 }

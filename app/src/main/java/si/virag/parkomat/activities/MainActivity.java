@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         Icepick.restoreInstanceState(this, savedInstanceState);
 
         // Check if welcome wizard has run
-        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_WELCOME_DONE, false)) {
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_WELCOME_DONE, false) || !carsManager.hasCars()) {
             Intent i = new Intent(this, WelcomeActivity.class);
             startActivity(i);
             finish();
