@@ -118,6 +118,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/main_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
@@ -134,6 +135,17 @@
             />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/main_parking_zone_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_above="@id/main_buttons"
+        android:layout_below="@id/main_top_block"
+        android:gravity="center"
+        android:text="Tu so informacije o coni."
+        />
 
 
 </RelativeLayout>

@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.config.NaturalOrderComparator;
 
 import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.temporal.ChronoField;
@@ -120,8 +121,12 @@ public class ZoneManager {
 
         // Parking is free on sundays
         if (now.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return null;
-        if (now.getDayOfWeek().equals(DayOfWeek.SATURDAY) && zoneType.times.containsKey("sat")) {
-            return zoneType.times.get("sat");
+        if (now.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
+            if (zoneType.times.containsKey("sat")) {
+                return zoneType.times.get("sat");
+            } else {
+                return null;
+            }
         }
 
         return zoneType.times.get("week");
@@ -140,5 +145,39 @@ public class ZoneManager {
 
     public String lastSelectedZone() {
         return preferences.getString(PREF_LAST_CHOSEN, zoneInformation.zones.keySet().iterator().next());
+    }
+
+    public String getZoneInfoString(@NonNull final String zone) {
+        LocalDate date = LocalDate.now();
+        if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return "Parkiranje je v nedeljo brezplačno.";
+
+        Zone z = zoneInformation.zones.get(zone);
+        ZoneType zoneType = zoneInformation.zoneTypes.get(z.zoneType);
+
+        StringBuilder str = new StringBuilder();
+        str.append("Cona ");
+        str.append(zone);
+        str.append(", ");
+
+        if (date.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
+            if (zoneType.times.containsKey("sat")) {
+                ZoneType.ParkingTime pt = zoneType.times.get("sat");
+                str.append("sob. ");
+                str.append(String.valueOf(pt.fromHour) + ":00 - ");
+                str.append(String.valueOf(pt.toHour) + ":00, ");
+            } else {
+                str.append("parkiranje v soboto brezplačno.");
+                return str.toString();
+            }
+        } else {
+            ZoneType.ParkingTime pt = zoneType.times.get("week");
+            str.append("pon-pet. ");
+            str.append(String.valueOf(pt.fromHour) + ":00 - ");
+            str.append(String.valueOf(pt.toHour) + ":00, ");
+        }
+
+        str.append("cena " + String.valueOf(zoneType.pricePerHour) + "EUR/h, ");
+        str.append("največ " + String.valueOf(z.maxHours == 0 ? zoneType.maxHours : z.maxHours) + " ur.");
+        return str.toString();
     }
 }

@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.main_parking_time_txt)
     TextView timeName;
 
+    @Bind(R.id.main_parking_zone_info)
+    TextView zoneInfo;
+
     @Bind(R.id.main_button_pay)
     Button payButton;
 
@@ -84,15 +89,15 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ParkomatApplication.get(this).inject(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
-        setZone(zoneManager.lastSelectedZone());
-        setTime(timeManager.initialDisplayedTime());
-        updatePriceOnButton();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         showCar(0);
+        setZone(zoneManager.lastSelectedZone());
+        setTime(timeManager.initialDisplayedTime());
+        updatePriceOnButton();
     }
 
     @Override
@@ -122,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
     private void setZone(@NonNull String zone) {
         zoneName.setText(zone);
         currentlySelectedZone = zone;
+        zoneInfo.setText(zoneManager.getZoneInfoString(zone));
+
         updatePriceOnButton();
     }
 
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Normalize time to max hours
         calculatedHoursToPay = zoneManager.getValidHoursToPayFromThisMoment(time, currentlySelectedZone);
-        if (calculatedHoursToPay == -1) {
+        if (calculatedHoursToPay < 1) {
             timeName.setText("Brezplačno");
             return;
         }
@@ -168,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePriceOnButton() {
-        if (calculatedHoursToPay == -1) {
+        if (calculatedHoursToPay < 1) {
             payButton.setText("Danes brezplačno.");
             payButton.setEnabled(false);
         } else {
