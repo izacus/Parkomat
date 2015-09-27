@@ -2,6 +2,7 @@ package si.virag.parkomat.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
@@ -38,6 +39,7 @@ import si.virag.parkomat.modules.ZoneManager;
 public class MainActivity extends AppCompatActivity {
 
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm ").withZone(ZoneId.systemDefault());
+    public static final String PREF_WELCOME_DONE = "Welcome.Wizard.Done";
 
     @Bind(R.id.main_registration_plate)
     TextView registrationPlate;
@@ -86,6 +88,13 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ParkomatApplication.get(this).inject(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
+
+        // Check if welcome wizard has run
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_WELCOME_DONE, false)) {
+            Intent i = new Intent(this, WelcomeActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
     @Override
