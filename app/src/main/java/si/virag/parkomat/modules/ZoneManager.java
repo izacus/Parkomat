@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
@@ -13,7 +14,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.config.NaturalOrderComparator;
 
+import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
+import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import java.io.IOException;
@@ -27,6 +31,7 @@ import rx.Observable;
 import rx.Subscriber;
 import si.virag.parkomat.models.zones.Zone;
 import si.virag.parkomat.models.zones.ZoneInformation;
+import si.virag.parkomat.models.zones.ZoneType;
 
 public class ZoneManager {
     private static final String LOG_TAG = "Parkomat.Zones";
@@ -92,11 +97,34 @@ public class ZoneManager {
         });
     }
 
-    public int getValidHoursToPayFromThisMoment(LocalTime desiredTimeToPayTo, String zone) {
+    public int getValidHoursToPayFromThisMoment(@NonNull final LocalTime desiredTimeToPayTo, @NonNull final String zone) {
         long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), desiredTimeToPayTo);
+
+        // Check for max parking time in the zone
+        ZoneType.ParkingTime time = getCurrentlyValidParkingTimeForZone(zone);
+
+        // Parking is free today!
+        if (time == null) return -1;
+
+        diffMinutes = Math.min(diffMinutes, ChronoUnit.MINUTES.between(LocalTime.now(), LocalTime.now().with(ChronoField.HOUR_OF_DAY, time.toHour)));
+
         int hours = (int)Math.ceil(diffMinutes / 60.0);
         int maxHoursInZone = maxHoursForZone(zone);
         return Math.min(hours, maxHoursInZone);
+    }
+
+    @Nullable
+    private ZoneType.ParkingTime getCurrentlyValidParkingTimeForZone(@NonNull final String zone) {
+        LocalDateTime now = LocalDateTime.now();
+        ZoneType zoneType = zoneInformation.zoneTypes.get(zoneInformation.zones.get(zone).zoneType);
+
+        // Parking is free on sundays
+        if (now.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return null;
+        if (now.getDayOfWeek().equals(DayOfWeek.SATURDAY) && zoneType.times.containsKey("sat")) {
+            return zoneType.times.get("sat");
+        }
+
+        return zoneType.times.get("week");
     }
 
     public float getPriceForZone(@NonNull String zoneName, int hours) {

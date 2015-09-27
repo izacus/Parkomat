@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         Icepick.restoreInstanceState(this, savedInstanceState);
         setZone(zoneManager.lastSelectedZone());
         setTime(timeManager.initialDisplayedTime());
+        updatePriceOnButton();
     }
 
     @Override
@@ -130,6 +131,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Normalize time to max hours
         calculatedHoursToPay = zoneManager.getValidHoursToPayFromThisMoment(time, currentlySelectedZone);
+        if (calculatedHoursToPay == -1) {
+            timeName.setText("Brezplačno");
+            return;
+        }
 
         LocalTime timeToDisplay = LocalTime.now().plus(calculatedHoursToPay, ChronoUnit.HOURS);
 
@@ -163,7 +168,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePriceOnButton() {
-        payButton.setText("Plačaj (" + zoneManager.getPriceForZone(currentlySelectedZone, calculatedHoursToPay) + " €)");
+        if (calculatedHoursToPay == -1) {
+            payButton.setText("Danes brezplačno.");
+            payButton.setEnabled(false);
+        } else {
+            payButton.setText("Plačaj (" + zoneManager.getPriceForZone(currentlySelectedZone, calculatedHoursToPay) + " €)");
+            payButton.setEnabled(true);
+        }
     }
 
     @OnClick(R.id.main_parking_time)
