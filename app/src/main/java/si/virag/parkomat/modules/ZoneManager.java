@@ -26,10 +26,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
 import rx.Observable;
 import rx.Subscriber;
+import si.virag.parkomat.R;
 import si.virag.parkomat.models.zones.Zone;
 import si.virag.parkomat.models.zones.ZoneInformation;
 import si.virag.parkomat.models.zones.ZoneType;
@@ -176,8 +178,9 @@ public class ZoneManager {
             str.append(String.valueOf(pt.toHour) + ":00, ");
         }
 
-        str.append("cena " + String.valueOf(zoneType.pricePerHour) + "EUR/h, ");
-        str.append("največ " + String.valueOf(z.maxHours == 0 ? zoneType.maxHours : z.maxHours) + " ur.");
+        str.append("cena " + String.format(Locale.GERMAN, "%.2f", zoneType.pricePerHour) + "€/h, ");
+        int maxHours = z.maxHours == 0 ? zoneType.maxHours : z.maxHours;
+        str.append("največ " + appContext.getResources().getQuantityString(R.plurals.hours_hint, maxHours, maxHours) + ".");
         return str.toString();
     }
 }

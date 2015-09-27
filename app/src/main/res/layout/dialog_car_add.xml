@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:nextFocusDown="@+id/dialog_caradd_carplate"
             android:nextFocusForward="@id/dialog_caradd_carplate"
-            android:hint="Car name"
+            android:hint="@string/dialog_car_hint_name"
             />
 
     </android.support.design.widget.TextInputLayout>
@@ -31,7 +31,7 @@
             android:id="@id/dialog_caradd_carplate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Car license plate"
+            android:hint="@string/dialog_car_hint_plate"
             />
     </android.support.design.widget.TextInputLayout>
 

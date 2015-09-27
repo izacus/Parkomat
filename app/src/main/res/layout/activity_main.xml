@@ -66,7 +66,7 @@
                     android:gravity="top|left"
                     android:textColor="@color/colorAccent"
                     android:includeFontPadding="false"
-                    android:text="Cona"
+                    android:text="@string/hint_zone"
                     style="@style/TextAppearance.AppCompat.Caption"
                     />
 
@@ -98,7 +98,7 @@
                     android:gravity="top|left"
                     android:textColor="@color/colorAccent"
                     android:includeFontPadding="false"
-                    android:text="Parkiranje do"
+                    android:text="@string/hint_parking_until"
                     style="@style/TextAppearance.AppCompat.Caption"
                     />
 
@@ -131,7 +131,7 @@
             android:id="@+id/main_button_pay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Plačaj"
+            android:text="@string/button_pay"
             />
 
     </LinearLayout>
@@ -144,7 +144,6 @@
         android:layout_above="@id/main_buttons"
         android:layout_below="@id/main_top_block"
         android:gravity="center"
-        android:text="Tu so informacije o coni."
         />
 
 

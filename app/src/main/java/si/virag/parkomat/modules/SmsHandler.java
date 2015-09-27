@@ -65,9 +65,9 @@ public class SmsHandler {
                                 subscriber.onNext(true);
                             }
                         })
-                        .title("Pošljem SMS?")
-                        .positiveText("Pošlji")
-                        .negativeText("Prekliči")
+                        .title(R.string.dialog_sendsms_title)
+                        .positiveText(R.string.dialog_sendsms_send)
+                        .negativeText(R.string.dialog_cancel)
                         .show();
                 View views = dialog.getCustomView();
                 ((TextView)views.findViewById(R.id.dialog_sms_zone)).setText(zone);

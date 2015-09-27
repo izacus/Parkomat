@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
-                android:text="Cona"
+                android:text="@string/hint_zone"
                 />
 
         </LinearLayout>
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
-                android:text="Reg. številka"
+                android:text="@string/hint_license_plate"
                 />
 
         </LinearLayout>
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
-                android:text="Ure"
+                android:text="@string/hint_hours"
                 />
 
         </LinearLayout>

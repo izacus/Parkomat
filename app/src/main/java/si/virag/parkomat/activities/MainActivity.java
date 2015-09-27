@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.SmsManager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
@@ -14,8 +13,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -146,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         LocalTime timeToDisplay = LocalTime.now().plus(calculatedHoursToPay, ChronoUnit.HOURS);
 
         SpannableStringBuilder string = new SpannableStringBuilder(timeFormatter.format(timeToDisplay));
-        String hourDifferenceString = "(" + (calculatedHoursToPay == zoneManager.maxHoursForZone(currentlySelectedZone) ? "max " : "") + calculatedHoursToPay + " ur)";
+        String hourDifferenceString = "(" + (calculatedHoursToPay == zoneManager.maxHoursForZone(currentlySelectedZone) ? "max " : "") + getResources().getQuantityString(R.plurals.hours_hint, calculatedHoursToPay, calculatedHoursToPay) + ")";
         string.append(hourDifferenceString);
         string.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         string.setSpan(new AbsoluteSizeSpan(14, true), string.length() - hourDifferenceString.length(), string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -176,10 +173,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void updatePriceOnButton() {
         if (calculatedHoursToPay < 1) {
-            payButton.setText("Danes brezplačno.");
+            payButton.setText(R.string.button_pay_free);
             payButton.setEnabled(false);
         } else {
-            payButton.setText("Plačaj (" + zoneManager.getPriceForZone(currentlySelectedZone, calculatedHoursToPay) + " €)");
+            payButton.setText(getString(R.string.button_pay, zoneManager.getPriceForZone(currentlySelectedZone, calculatedHoursToPay)));
             payButton.setEnabled(true);
         }
     }

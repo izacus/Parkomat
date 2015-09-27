@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Parkomat</string>
+    <string name="menu_title_cars">Avti</string>
+    <string name="dialog_car_hint_name">Ime avtomobila</string>
+    <string name="dialog_car_hint_plate">Registerska številka</string>
+    <string name="hint_zone">Cona</string>
+    <string name="hint_license_plate">Reg. številka</string>
+    <string name="hint_hours">Ure</string>
+    <string name="hint_parking_until">Parkiranje do</string>
+    <string name="button_pay">Plačaj (%.2f €)</string>
+
+    <string name="button_pay_free">Danes brezplačno.</string>
+    <string name="dialog_car_addcar">Dodaj avto</string>
+    <string name="dialog_car_add">Dodaj</string>
+    <string name="dialog_cancel">Prekliči</string>
+    <string name="dialog_car_editcar">Uredi avto</string>
+    <string name="dialog_car_save">Shrani</string>
+    <string name="snackbar_car_deleted">%s izbrisan.</string>
+
+
+    <string name="dialog_sendsms_title">Pošljem SMS?</string>
+    <string name="dialog_sendsms_send">Pošlji</string>
+
+    <plurals name="hours_hint">
+        <item quantity="one">%d uro</item>
+        <item quantity="two">%d uri</item>
+        <item quantity="few">%d ure</item>
+        <item quantity="other">%d ur</item>
+    </plurals>
+</resources>

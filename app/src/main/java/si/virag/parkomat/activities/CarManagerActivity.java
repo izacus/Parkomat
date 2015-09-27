@@ -80,10 +80,10 @@ public class CarManagerActivity extends AppCompatActivity implements CarListAdap
     @OnClick(R.id.carmanager_add)
     protected void onAddClick(FloatingActionButton button) {
         new MaterialDialog.Builder(this)
-                          .title("Add car")
+                          .title(R.string.dialog_car_addcar)
                           .customView(R.layout.dialog_car_add, false)
-                          .positiveText("Add")
-                          .negativeText("Cancel")
+                          .positiveText(R.string.dialog_car_add)
+                          .negativeText(R.string.dialog_cancel)
                           .callback(new MaterialDialog.ButtonCallback() {
                               @Override
                               public void onPositive(MaterialDialog dialog) {
@@ -101,10 +101,10 @@ public class CarManagerActivity extends AppCompatActivity implements CarListAdap
     @Override
     public void onCarClicked(final Car car, final int position) {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
-                                    .title("Edit car")
+                                    .title(R.string.dialog_car_editcar)
                                     .customView(R.layout.dialog_car_add, false)
-                                    .positiveText("Save")
-                                    .negativeText("Cancel")
+                                    .positiveText(R.string.dialog_car_save)
+                                    .negativeText(R.string.dialog_cancel)
                                     .callback(new MaterialDialog.ButtonCallback() {
                                         @Override
                                         public void onPositive(MaterialDialog dialog) {
@@ -141,7 +141,7 @@ public class CarManagerActivity extends AppCompatActivity implements CarListAdap
             public void onCompleted() {
                 updateCarList();
 
-                Snackbar.make(container, car.name + " deleted.", Snackbar.LENGTH_LONG)
+                Snackbar.make(container, getString(R.string.snackbar_car_deleted, car.name), Snackbar.LENGTH_LONG)
                         .setAction("UNDO", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
