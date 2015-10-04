@@ -10,16 +10,16 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ParkomatTheme" >
-        <activity android:name=".activities.MainActivity" >
+        <activity android:name=".activities.MainActivity"
+                  android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.CarManagerActivity" >
+        <activity android:name=".activities.CarManagerActivity">
         </activity>
-        <activity android:name=".activities.WelcomeActivity" android:theme="@style/ParkomatTheme.NoActionBar" android:windowSoftInputMode="adjustPan" >
+        <activity android:name=".activities.WelcomeActivity" android:theme="@style/ParkomatTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 

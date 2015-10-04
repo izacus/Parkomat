@@ -7,6 +7,7 @@
     <string name="hint_license_plate">Reg. številka</string>
     <string name="hint_hours">Ure</string>
     <string name="hint_parking_until">Parkiranje do</string>
+    <string name="hint_sunday_parking_free">Parkiranje je v nedeljo brezplačno.</string>
     <string name="button_pay">Plačaj (%.2f €)</string>
 
     <string name="button_pay_free">Danes brezplačno.</string>
