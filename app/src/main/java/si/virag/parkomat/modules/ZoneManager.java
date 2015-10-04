@@ -79,7 +79,7 @@ public class ZoneManager {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
                 new MaterialDialog.Builder(owner)
-                        .title("Izberi cono")
+                        .title(R.string.dialog_title_choose_zone)
                         .titleColorRes(R.color.colorAccent)
                         .items(zoneNames)
                         .itemsCallback(new MaterialDialog.ListCallback() {
@@ -102,7 +102,8 @@ public class ZoneManager {
     }
 
     public int getValidHoursToPayFromThisMoment(@NonNull final LocalTime desiredTimeToPayTo, @NonNull final String zone) {
-        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), desiredTimeToPayTo);
+        return 6;
+/*        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), desiredTimeToPayTo);
 
         // Check for max parking time in the zone
         ZoneType.ParkingTime time = getCurrentlyValidParkingTimeForZone(zone);
@@ -114,13 +115,17 @@ public class ZoneManager {
 
         int hours = (int)Math.ceil(diffMinutes / 60.0);
         int maxHoursInZone = maxHoursForZone(zone);
-        return Math.min(hours, maxHoursInZone);
+        return Math.min(hours, maxHoursInZone); */
     }
 
     @Nullable
     private ZoneType.ParkingTime getCurrentlyValidParkingTimeForZone(@NonNull final String zone) {
         LocalDateTime now = LocalDateTime.now();
         ZoneType zoneType = zoneInformation.zoneTypes.get(zoneInformation.zones.get(zone).zoneType);
+
+        return zoneType.times.get("week");
+
+        /*
 
         // Parking is free on sundays
         if (now.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return null;
@@ -132,7 +137,7 @@ public class ZoneManager {
             }
         }
 
-        return zoneType.times.get("week");
+        return zoneType.times.get("week"); */
     }
 
     public float getPriceForZone(@NonNull String zoneName, int hours) {
@@ -152,7 +157,7 @@ public class ZoneManager {
 
     public String getZoneInfoString(@NonNull final String zone) {
         LocalDate date = LocalDate.now();
-        if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return "Parkiranje je v nedeljo brezplačno.";
+        if (date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return appContext.getString(R.string.hint_sunday_parking_free);
 
         Zone z = zoneInformation.zones.get(zone);
         ZoneType zoneType = zoneInformation.zoneTypes.get(z.zoneType);

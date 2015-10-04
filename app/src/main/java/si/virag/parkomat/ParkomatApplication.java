@@ -27,6 +27,7 @@ public class ParkomatApplication extends Application {
 
     @Override
     public void onCreate() {
+        AndroidThreeTen.init(this);
         super.onCreate();
         Locale locale = new Locale("sl");
         Locale.setDefault(locale);
@@ -36,7 +37,6 @@ public class ParkomatApplication extends Application {
 
         FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);
         FlowManager.init(this);
-        AndroidThreeTen.init(this);
 
         component = DaggerParkomatComponent.builder()
                     .parkomatApplicationModule(new ParkomatApplicationModule(this))

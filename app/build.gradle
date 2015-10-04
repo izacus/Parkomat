@@ -68,6 +68,9 @@ dependencies {
         transitive = true
     }
 
+    // Android 6 permissions
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.2.0@aar'
+
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:appcompat-v7:23.0.1'

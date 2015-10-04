@@ -1,3 +1,5 @@
 <resources>
 
+    <string name="dialog_title_choose_zone">Izberi cono</string>
+    <string name="hint_sunday_parking_free">Parkiranje je v nedeljo brezplačno.</string>
 </resources>

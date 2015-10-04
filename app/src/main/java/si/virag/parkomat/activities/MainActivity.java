@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -11,6 +12,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 import rx.Observer;
+import rx.Subscriber;
 import rx.functions.Action1;
 import si.virag.parkomat.ParkomatApplication;
 import si.virag.parkomat.R;
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm ").withZone(ZoneId.systemDefault());
     public static final String PREF_WELCOME_DONE = "Welcome.Wizard.Done";
+
+    @Bind(R.id.main_container)
+    View container;
 
     @Bind(R.id.main_registration_plate)
     TextView registrationPlate;
@@ -214,10 +220,20 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.main_button_pay)
     public void onParkingPayClick() {
         String plateNormalized = registrationPlate.getText().toString().replaceAll("[^A-Za-z0-9]", "");
-        smsHandler.payForParking(this, currentlySelectedZone, plateNormalized, calculatedHoursToPay).subscribe(new Action1<Void>() {
+        smsHandler.payForParking(this, currentlySelectedZone, plateNormalized, calculatedHoursToPay).subscribe(new Subscriber<Void>() {
             @Override
-            public void call(Void aVoid) {
+            public void onCompleted() {
+                // Nothing TBD
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                Snackbar.make(container, "Sporočila ni bilo moč poslati.", Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNext(Void aVoid) {
+                // Nothing TBD
             }
         });
     }

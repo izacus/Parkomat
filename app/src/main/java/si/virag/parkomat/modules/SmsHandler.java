@@ -1,5 +1,6 @@
 package si.virag.parkomat.modules;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.Locale;
 
@@ -32,19 +34,31 @@ public class SmsHandler {
         this.appContext = applicationContext;
     }
 
-    public Observable<Void> payForParking(@NonNull Activity owner, @NonNull final String zone, @NonNull final String carPlate, @NonNull final int hours) {
+    public Observable<Void> payForParking(@NonNull final Activity owner, @NonNull final String zone, @NonNull final String carPlate, @NonNull final int hours) {
         return showSmsSendDialog(owner, zone, carPlate, hours)
-               .map(new Func1<Boolean, Void>() {
-                   @Override
-                   public Void call(Boolean aBoolean) {
-                       if (!aBoolean) return null;
-                       SmsManager manager = SmsManager.getDefault();
-                       String smsContent = String.format("%s %s %d", zone.toUpperCase(Locale.GERMAN), carPlate.toUpperCase(Locale.GERMAN), hours);
-                       Log.d(LOG_TAG, smsContent);
-                       manager.sendTextMessage(PHONE_NUMBER, null, smsContent, null, null);
-                       return null;
-                   }
-               });
+                .filter(new Func1<Boolean, Boolean>() {
+                    @Override
+                    public Boolean call(Boolean send) {
+                        return send;
+                    }
+                })
+                .flatMap(new Func1<Boolean, Observable<Boolean>>() {
+                    @Override
+                    public Observable<Boolean> call(Boolean allow) {
+                        return RxPermissions.getInstance(owner).request(Manifest.permission.SEND_SMS);
+                    }
+                })
+                .map(new Func1<Boolean, Void>() {
+                    @Override
+                    public Void call(Boolean permissionGranted) {
+                        if (!permissionGranted) throw new SecurityException("Permission was not granted.");
+                        SmsManager manager = SmsManager.getDefault();
+                        String smsContent = String.format("%s %s %d", zone.toUpperCase(Locale.GERMAN), carPlate.toUpperCase(Locale.GERMAN), hours);
+                        Log.d(LOG_TAG, smsContent);
+                        manager.sendTextMessage(PHONE_NUMBER, null, smsContent, null, null);
+                        return null;
+                    }
+                });
     }
 
     private Observable<Boolean> showSmsSendDialog(@NonNull final Activity owner, @NonNull final String zone, @NonNull final String carPlate, @NonNull final int hours) {

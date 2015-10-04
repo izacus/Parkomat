@@ -30,6 +30,7 @@
     3.) Brez vaše vednosti in potrditve aplikacija ne bo poslala nobenega SMSa.\n\n
     4.) Vsebine vaših obstoječih sporočil aplikacija ne bo prenašala s telefona.
     </string>
+    <string name="dialog_title_choose_zone">Izberi cono</string>
 
     <plurals name="hours_hint">
         <item quantity="one">%d uro</item>
