@@ -103,6 +103,7 @@ public class CarManagerActivity extends AppCompatActivity implements CarListAdap
     public void onCarClicked(final Car car, final int position) {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                                     .title(R.string.dialog_car_editcar)
+                                    .titleColorRes(R.color.colorAccent)
                                     .customView(R.layout.dialog_car_add, false)
                                     .positiveText(R.string.dialog_car_save)
                                     .negativeText(R.string.dialog_cancel)
