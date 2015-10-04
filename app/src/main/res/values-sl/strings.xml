@@ -26,8 +26,7 @@
     1.) Urbana mobilno plačevanje poteka z SMSi. Tako bo ta aplikacija ob plačevanju pošiljanja SMSe, ki bodo obračunani
         po ceniku vašega operaterja.\n
         \n
-    2.) Cene in podatki v aplikaciji se NE OSVEŽUJEJO sproti in so lahko zastareli ali napačni. Vedno se prepričajte a je cena v coni parkiranja enaka kot jo
-        aplikacija prikazuje.\n\n
+    2.) Cene in podatki v aplikaciji se NE OSVEŽUJEJO sproti in so lahko zastareli ali napačni. Vedno se prepričajte, če je cena v coni parkiranja enaka kot jo aplikacija prikazuje.\n\n
     3.) Brez vaše vednosti in potrditve aplikacija ne bo poslala nobenega SMSa.\n\n
     4.) Vsebine vaših obstoječih sporočil aplikacija ne bo prenašala s telefona.
     </string>
