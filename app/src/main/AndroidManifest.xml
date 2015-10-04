@@ -21,6 +21,10 @@
         </activity>
         <activity android:name=".activities.WelcomeActivity" android:theme="@style/ParkomatTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5387e48d80669f4e2a3a0ca327b54e39b9e74e5f" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

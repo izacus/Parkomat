@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.res.Configuration;
 
+import com.crashlytics.android.Crashlytics;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -29,6 +31,7 @@ public class ParkomatApplication extends Application {
     public void onCreate() {
         AndroidThreeTen.init(this);
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         Locale locale = new Locale("sl");
         Locale.setDefault(locale);
         Configuration config = new Configuration();

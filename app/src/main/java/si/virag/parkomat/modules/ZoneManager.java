@@ -102,8 +102,7 @@ public class ZoneManager {
     }
 
     public int getValidHoursToPayFromThisMoment(@NonNull final LocalTime desiredTimeToPayTo, @NonNull final String zone) {
-        return 6;
-/*        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), desiredTimeToPayTo);
+        long diffMinutes = ChronoUnit.MINUTES.between(LocalTime.now(), desiredTimeToPayTo);
 
         // Check for max parking time in the zone
         ZoneType.ParkingTime time = getCurrentlyValidParkingTimeForZone(zone);
@@ -115,17 +114,13 @@ public class ZoneManager {
 
         int hours = (int)Math.ceil(diffMinutes / 60.0);
         int maxHoursInZone = maxHoursForZone(zone);
-        return Math.min(hours, maxHoursInZone); */
+        return Math.min(hours, maxHoursInZone);
     }
 
     @Nullable
     private ZoneType.ParkingTime getCurrentlyValidParkingTimeForZone(@NonNull final String zone) {
         LocalDateTime now = LocalDateTime.now();
         ZoneType zoneType = zoneInformation.zoneTypes.get(zoneInformation.zones.get(zone).zoneType);
-
-        return zoneType.times.get("week");
-
-        /*
 
         // Parking is free on sundays
         if (now.getDayOfWeek().equals(DayOfWeek.SUNDAY)) return null;
@@ -137,7 +132,7 @@ public class ZoneManager {
             }
         }
 
-        return zoneType.times.get("week"); */
+        return zoneType.times.get("week");
     }
 
     public float getPriceForZone(@NonNull String zoneName, int hours) {
