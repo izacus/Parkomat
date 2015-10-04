@@ -4,7 +4,7 @@
 
     <item android:id="@+id/menu_main_carmanager"
           android:title="@string/menu_title_cars"
-          app:showAsAction="ifRoom" />
+          app:showAsAction="never" />
 
 
 </menu>

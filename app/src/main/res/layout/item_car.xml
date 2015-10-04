@@ -1,29 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="72dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingBottom="8dp"
     android:paddingTop="8dp"
     android:background="?android:attr/selectableItemBackground"
-    >
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/item_car_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_marginLeft="56dp"
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/ic_car_grey600_36dp"
         />
 
-    <TextView
-        android:id="@+id/item_car_plate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_marginLeft="16dp"
+        >
 
-        android:layout_marginLeft="56dp"
-        />
+        <TextView
+            android:id="@+id/item_car_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:gravity="start|bottom"
+            tools:text="Carname"
+            />
 
+        <TextView
+            android:id="@+id/item_car_plate"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="start|top"
+            tools:text="LJ M1-999"
+            />
+
+    </LinearLayout>
 </LinearLayout>

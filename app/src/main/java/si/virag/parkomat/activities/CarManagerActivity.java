@@ -81,6 +81,7 @@ public class CarManagerActivity extends AppCompatActivity implements CarListAdap
     protected void onAddClick(FloatingActionButton button) {
         new MaterialDialog.Builder(this)
                           .title(R.string.dialog_car_addcar)
+                          .titleColorRes(R.color.colorAccent)
                           .customView(R.layout.dialog_car_add, false)
                           .positiveText(R.string.dialog_car_add)
                           .negativeText(R.string.dialog_cancel)

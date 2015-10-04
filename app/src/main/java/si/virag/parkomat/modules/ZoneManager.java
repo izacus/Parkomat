@@ -80,6 +80,7 @@ public class ZoneManager {
             public void call(final Subscriber<? super String> subscriber) {
                 new MaterialDialog.Builder(owner)
                         .title("Izberi cono")
+                        .titleColorRes(R.color.colorAccent)
                         .items(zoneNames)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
