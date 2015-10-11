@@ -1,6 +1,7 @@
 package si.virag.parkomat.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -49,16 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.main_registration_plate)
     TextView registrationPlate;
-
     @Bind(R.id.main_car_name)
     TextView carName;
-
     @Bind(R.id.main_parking_zone_txt)
     TextView zoneName;
-
     @Bind(R.id.main_parking_time_txt)
     TextView timeName;
-
     @Bind(R.id.main_parking_zone_info)
     TextView zoneInfo;
 
@@ -233,6 +230,23 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(Void aVoid) {
+                // Nothing TBD
+            }
+        });
+    }
+
+    @OnClick(R.id.main_button_topup)
+    public void onTopUpClick() {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + SmsHandler.PHONE_NUMBER));
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.main_button_funds)
+    public void onFundsClick() {
+        smsHandler.checkForFunds(this).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
                 // Nothing TBD
             }
         });

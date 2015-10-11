@@ -23,8 +23,7 @@ import rx.functions.Func1;
 import si.virag.parkomat.R;
 
 public class SmsHandler {
-
-    private static final String PHONE_NUMBER = "+38641202010";
+    public static final String PHONE_NUMBER = "+38641202010";
     private static final String LOG_TAG = "Parkomat.SmsHandler";
 
     @NonNull
@@ -89,6 +88,52 @@ public class SmsHandler {
                 ((TextView)views.findViewById(R.id.dialog_sms_plate)).setText(carPlate);
             }
         });
+    }
 
+    public Observable<Void> checkForFunds(@NonNull final Activity owner) {
+        return showFundsSendDialog(owner)
+                .flatMap(new Func1<Boolean, Observable<Boolean>>() {
+                    @Override
+                    public Observable<Boolean> call(Boolean aBoolean) {
+                        return RxPermissions.getInstance(owner).request(Manifest.permission.SEND_SMS);
+                    }
+                })
+                .map(new Func1<Boolean, Void>() {
+                    @Override
+                    public Void call(Boolean permissionGranted) {
+                        if (!permissionGranted) throw new SecurityException("Permission was not granted.");
+                        SmsManager manager = SmsManager.getDefault();
+                        String smsContent = "STANJE";
+                        Log.d(LOG_TAG, smsContent);
+                        manager.sendTextMessage(PHONE_NUMBER, null, smsContent, null, null);
+                        return null;
+                    }
+                });
+    }
+
+    private Observable<Boolean> showFundsSendDialog(@NonNull final Activity owner) {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(final Subscriber<? super Boolean> subscriber) {
+                new MaterialDialog.Builder(owner)
+                        .title("Pošljem SMS?")
+                        .content("Pošljem SMS s poizvedbo o stanju?")
+                        .positiveText(R.string.dialog_sendsms_send)
+                        .negativeText(R.string.dialog_cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                subscriber.onNext(true);
+                            }
+                        })
+                        .dismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                subscriber.onCompleted();
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 }
