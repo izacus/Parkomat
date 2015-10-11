@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import de.greenrobot.event.EventBus;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -39,6 +40,7 @@ import si.virag.parkomat.modules.CarsManager;
 import si.virag.parkomat.modules.SmsHandler;
 import si.virag.parkomat.modules.TimeManager;
 import si.virag.parkomat.modules.ZoneManager;
+import si.virag.parkomat.receivers.SmsReceiver;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -107,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
         setZone(zoneManager.lastSelectedZone());
         setTime(timeManager.initialDisplayedTime());
         updatePriceOnButton();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -244,13 +254,28 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.main_button_funds)
     public void onFundsClick() {
-        smsHandler.checkForFunds(this).subscribe(new Action1<Void>() {
+        smsHandler.checkForFunds(this).subscribe(new Subscriber<Void>() {
             @Override
-            public void call(Void aVoid) {
-                // Nothing TBD
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Void aVoid) {
+
             }
         });
     }
+
+    public void onEventMainThread(SmsReceiver.ReceivedSmsMessage message) {
+        smsHandler.handleReceivedMessage(this, message);
+    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

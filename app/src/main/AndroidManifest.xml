@@ -3,6 +3,7 @@
     package="si.virag.parkomat" >
 
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:name=".ParkomatApplication"
@@ -10,6 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ParkomatTheme" >
+
         <activity android:name=".activities.MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -17,10 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.CarManagerActivity">
-        </activity>
-        <activity android:name=".activities.WelcomeActivity" android:theme="@style/ParkomatTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
-        </activity>
+
+        <activity android:name=".activities.CarManagerActivity" />
+        <activity android:name=".activities.WelcomeActivity" android:theme="@style/ParkomatTheme.NoActionBar" android:windowSoftInputMode="adjustPan" />
+
+        <receiver android:name=".receivers.SmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="5387e48d80669f4e2a3a0ca327b54e39b9e74e5f" />

@@ -14,13 +14,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Action1;
-import rx.functions.Func0;
 import rx.functions.Func1;
 import si.virag.parkomat.R;
+import si.virag.parkomat.receivers.SmsReceiver;
 
 public class SmsHandler {
     public static final String PHONE_NUMBER = "+38641202010";
@@ -95,7 +96,7 @@ public class SmsHandler {
                 .flatMap(new Func1<Boolean, Observable<Boolean>>() {
                     @Override
                     public Observable<Boolean> call(Boolean aBoolean) {
-                        return RxPermissions.getInstance(owner).request(Manifest.permission.SEND_SMS);
+                        return RxPermissions.getInstance(owner).request(Manifest.permission.SEND_SMS, Manifest.permission.RECEIVE_SMS);
                     }
                 })
                 .map(new Func1<Boolean, Void>() {
@@ -116,8 +117,8 @@ public class SmsHandler {
             @Override
             public void call(final Subscriber<? super Boolean> subscriber) {
                 new MaterialDialog.Builder(owner)
-                        .title("Pošljem SMS?")
-                        .content("Pošljem SMS s poizvedbo o stanju?")
+                        .title(R.string.dialog_sendsms_title)
+                        .content(R.string.dialog_check_funds)
                         .positiveText(R.string.dialog_sendsms_send)
                         .negativeText(R.string.dialog_cancel)
                         .callback(new MaterialDialog.ButtonCallback() {
@@ -135,5 +136,24 @@ public class SmsHandler {
                         .show();
             }
         });
+    }
+
+    public void handleReceivedMessage(@NonNull final Activity owner, @NonNull final SmsReceiver.ReceivedSmsMessage message) {
+        if (message.body.contains("Stanje na SMS Parking")) {
+            showFundsDialog(owner, message.body);
+        }
+    }
+
+    private void showFundsDialog(Activity owner, String body) {
+        Pattern pattern = Pattern.compile("Stanje na SMS Parking racunu je ([0-9,.]+) EUR.");
+        Matcher matcher = pattern.matcher(body);
+        if (!matcher.matches()) return;
+
+        float value = Float.parseFloat(matcher.group(1).replace(',', '.'));
+        new MaterialDialog.Builder(owner)
+                .title(R.string.dialog_funds_title)
+                .content(owner.getString(R.string.dialog_funds_content, value))
+                .positiveText(R.string.dialog_ok)
+                .show();
     }
 }
