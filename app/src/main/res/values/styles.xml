@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:buttonStyle">@style/ParkomatTheme.Button.NoBackground</item>
     </style>
 
     <style name="ParkomatTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -14,6 +15,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">#DDFFFFFF</item>
+    </style>
+
+    <style name="ParkomatTheme.Button.NoBackground" parent="Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/mdtp_white</item>
+    </style>
+
+    <style name="ParkomatTheme.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@color/button_colored_text_color</item>
     </style>
 
 </resources>

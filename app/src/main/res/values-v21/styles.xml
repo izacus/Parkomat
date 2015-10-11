@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ParkomatTheme.Button.NoBackground" parent="Widget.AppCompat.Button">
+        <item name="android:colorButtonNormal">@color/mdtp_white</item>
+    </style>
+
+    <style name="ParkomatTheme.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@color/button_colored_text_color</item>
+    </style>
+</resources>

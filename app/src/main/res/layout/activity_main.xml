@@ -12,7 +12,7 @@
         android:id="@+id/main_top_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="100dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
@@ -123,15 +123,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_call_black_24dp"
+                android:theme="@style/ParkomatTheme.Button.NoBackground"
+                android:text="@string/button_topup"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_textsms_black_24dp"
+                android:text="@string/button_funds"
+                android:theme="@style/ParkomatTheme.Button.NoBackground"
+            />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/main_button_pay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_textsms_white_24dp"
+            android:theme="@style/ParkomatTheme.Button"
             android:text="@string/button_pay"
             />
 
@@ -145,6 +174,7 @@
         android:layout_above="@id/main_buttons"
         android:layout_below="@id/main_top_block"
         android:gravity="center"
+        tools:text="Sem pridejo informacije o parkiranju."
         />
 
 
