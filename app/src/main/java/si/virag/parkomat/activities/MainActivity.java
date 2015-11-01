@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        showCar(0);
+        showCar(carsManager.lastSelectedCarIndex());
         setZone(zoneManager.lastSelectedZone());
         setTime(timeManager.initialDisplayedTime());
         updatePriceOnButton();
@@ -201,6 +201,26 @@ public class MainActivity extends AppCompatActivity {
             payButton.setText(getString(R.string.button_pay, zoneManager.getPriceForZone(currentlySelectedZone, calculatedHoursToPay)));
             payButton.setEnabled(true);
         }
+    }
+
+    @OnClick(R.id.main_registration_plate)
+    public void onCarNameClick() {
+        carsManager.pickCar(this).subscribe(new Subscriber<Integer>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Integer carIndex) {
+                showCar(carIndex);
+            }
+        });
     }
 
     @OnClick(R.id.main_parking_time)

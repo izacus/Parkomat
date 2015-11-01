@@ -118,6 +118,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/main_parking_zone_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_below="@id/main_top_block"
+        android:gravity="center"
+        tools:text="Sem pridejo informacije o parkiranju."
+    />
+
     <LinearLayout
         android:id="@+id/main_buttons"
         android:layout_width="match_parent"
@@ -126,6 +136,7 @@
         android:orientation="vertical"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_below="@+id/main_parking_zone_info"
         >
 
         <LinearLayout
@@ -167,17 +178,6 @@
             />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/main_parking_zone_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_above="@id/main_buttons"
-        android:layout_below="@id/main_top_block"
-        android:gravity="center"
-        tools:text="Sem pridejo informacije o parkiranju."
-        />
 
 
 </RelativeLayout>

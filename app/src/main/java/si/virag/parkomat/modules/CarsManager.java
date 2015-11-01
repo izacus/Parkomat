@@ -1,19 +1,28 @@
 package si.virag.parkomat.modules;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import android.view.View;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import java.util.List;
 import java.util.Locale;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import si.virag.parkomat.R;
 import si.virag.parkomat.models.Car;
 import si.virag.parkomat.models.Car$Table;
 
@@ -24,10 +33,17 @@ import si.virag.parkomat.models.Car$Table;
 public class CarsManager {
 
     private static final String LOG_TAG = "Parkomat.CarsManager";
+
+    private static final String PREF_LAST_CHOSEN_CAR = "Last.Car";
+
     private final Context context;
+
+    @NonNull
+    private final SharedPreferences preferences;
 
     public CarsManager(Context context) {
         this.context = context;
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public Observable<Car> addCar(@NonNull final String name, @NonNull final String licensePlate) {
@@ -113,7 +129,54 @@ public class CarsManager {
         });
     }
 
+    public Observable<Integer> pickCar(final Activity owner) {
+        return Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(final Subscriber<? super Integer> subscriber) {
+                String[] cars = getCars()
+                                    .map(new Func1<Car, String>() {
+                                        @Override
+                                        public String call(Car car) {
+                                            return car.name + " (" + car.registrationPlate + ")";
+                                        }
+                                    })
+                                    .toList()
+                                    .map(new Func1<List<String>, String[]>() {
+                                        @Override
+                                        public String[] call(List<String> strings) {
+                                            return strings.toArray(new String[strings.size()]);
+                                        }
+                                    })
+                                    .toBlocking()
+                                    .single();
+
+                new MaterialDialog.Builder(owner)
+                                   .title("Izberite avto")
+                                   .titleColorRes(R.color.colorAccent)
+                                   .items(cars)
+                                   .itemsCallback(new MaterialDialog.ListCallback() {
+                                       @Override
+                                       public void onSelection(MaterialDialog materialDialog, View view, int position, CharSequence name) {
+                                           preferences.edit().putInt(PREF_LAST_CHOSEN_CAR, position).apply();
+                                           subscriber.onNext(position);
+                                       }
+                                   })
+                                   .dismissListener(new DialogInterface.OnDismissListener() {
+                                       @Override
+                                       public void onDismiss(DialogInterface dialog) {
+                                           subscriber.onCompleted();
+                                       }
+                                   })
+                                   .show();
+            }
+        });
+    }
+
     public boolean hasCars() {
         return new Select().from(Car.class).where(Condition.column(Car$Table.DELETED).eq(false)).count() > 0;
+    }
+
+    public int lastSelectedCarIndex() {
+        return preferences.getInt(PREF_LAST_CHOSEN_CAR, 0);
     }
 }
