@@ -36,6 +36,7 @@
     <string name="dialog_funds_title">Stanje</string>
     <string name="dialog_funds_content">Stanje na računu je %.2f €.</string>
     <string name="dialog_ok">V redu</string>
+    <string name="dialog_title_choose_car">Izberite avto</string>
 
     <plurals name="hours_hint">
         <item quantity="one">%d uro</item>

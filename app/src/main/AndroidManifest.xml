@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <supports-screens android:smallScreens="false" />
 
     <application
         android:name=".ParkomatApplication"

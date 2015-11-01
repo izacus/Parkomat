@@ -12,7 +12,7 @@
         android:id="@+id/main_top_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
@@ -45,7 +45,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="54dp"
             android:orientation="horizontal"
             >
 
@@ -132,7 +132,10 @@
         android:id="@+id/main_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="vertical"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -171,7 +174,7 @@
         <Button
             android:id="@+id/main_button_pay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:drawableLeft="@drawable/ic_textsms_white_24dp"
             android:theme="@style/ParkomatTheme.Button"
             android:text="@string/button_pay"

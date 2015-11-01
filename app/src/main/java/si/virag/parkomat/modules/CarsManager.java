@@ -151,7 +151,7 @@ public class CarsManager {
                                     .single();
 
                 new MaterialDialog.Builder(owner)
-                                   .title("Izberite avto")
+                                   .title(R.string.dialog_title_choose_car)
                                    .titleColorRes(R.color.colorAccent)
                                    .items(cars)
                                    .itemsCallback(new MaterialDialog.ListCallback() {
