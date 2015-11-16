@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         // Normalize time to max hours
         calculatedHoursToPay = zoneManager.getValidHoursToPayFromThisMoment(time, currentlySelectedZone);
         if (calculatedHoursToPay < 1) {
-            timeName.setText("Brezplačno");
+            timeName.setText("--");
             return;
         }
 
