@@ -2,9 +2,15 @@ package si.virag.parkomat.modules;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +18,11 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.tbruyelle.rxpermissions.RxPermissions;
+
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -21,6 +32,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 import si.virag.parkomat.R;
+import si.virag.parkomat.receivers.ExpirationReceiver;
 import si.virag.parkomat.receivers.SmsReceiver;
 
 public class SmsHandler {
@@ -141,6 +153,32 @@ public class SmsHandler {
     public void handleReceivedMessage(@NonNull final Activity owner, @NonNull final SmsReceiver.ReceivedSmsMessage message) {
         if (message.body.contains("Stanje na SMS Parking")) {
             showFundsDialog(owner, message.body);
+        } else if (message.body.contains("Placilo parkirnine za") && message.body.contains("uspesno.")) {
+            registerParkingExpirationNotification(message.body);
+        }
+    }
+
+    private void registerParkingExpirationNotification(@NonNull final String smsBody) {
+        LocalDateTime expirationDate = getDateTimeFromParkingSMS(smsBody);
+        if (expirationDate == null) return;
+        LocalDateTime notificationTime = expirationDate.minus(10, ChronoUnit.MINUTES);
+        LocalDateTime now = LocalDateTime.now();
+        if (notificationTime.isBefore(now)) return;
+
+        long notificationEpoch = notificationTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long expirationEpoch = expirationDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        AlarmManager am = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
+        Intent notificationReceiverIntent = new Intent(appContext, ExpirationReceiver.class);
+        notificationReceiverIntent.putExtra(ExpirationReceiver.EXPIRATION_TIME_EXTRA, expirationEpoch);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, 0, notificationReceiverIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        // Sigh.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            am.set(AlarmManager.RTC_WAKEUP, notificationEpoch, pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            am.setExact(AlarmManager.RTC_WAKEUP, notificationEpoch, pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notificationEpoch, pendingIntent);
         }
     }
 
@@ -155,5 +193,18 @@ public class SmsHandler {
                 .content(owner.getString(R.string.dialog_funds_content, value))
                 .positiveText(R.string.dialog_ok)
                 .show();
+    }
+
+
+    @Nullable
+    @VisibleForTesting LocalDateTime getDateTimeFromParkingSMS(String smsBody) {
+        Pattern p = Pattern.compile("Veljavnost: ([0-9:]+) \\(([0-9\\.]+)\\)");
+        Matcher m = p.matcher(smsBody);
+        if (!m.find()) return null;
+
+        String timeString = m.group(1);
+        String dateString = m.group(2);
+
+        return LocalDateTime.parse(timeString + " " + dateString, DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"));
     }
 }
