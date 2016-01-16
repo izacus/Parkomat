@@ -172,6 +172,8 @@ public class SmsHandler {
         notificationReceiverIntent.putExtra(ExpirationReceiver.EXPIRATION_TIME_EXTRA, expirationEpoch);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, 0, notificationReceiverIntent, PendingIntent.FLAG_ONE_SHOT);
 
+        Log.d("Parkomat", "Scheduling parking notification at " + notificationTime.toString() + ".");
+
         // Sigh.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             am.set(AlarmManager.RTC_WAKEUP, notificationEpoch, pendingIntent);
