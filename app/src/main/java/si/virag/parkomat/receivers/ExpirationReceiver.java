@@ -20,6 +20,7 @@ import org.threeten.bp.temporal.ChronoUnit;
 import si.virag.parkomat.R;
 
 public class ExpirationReceiver extends BroadcastReceiver {
+    private static final int NOTIFICATION_ID = 1024;
 
     public static final String EXPIRATION_TIME_EXTRA = "ExpirationTime";
     public static final String CANCEL_NOTIFICATION_UPDATE = "CancelNotificationUpdate";
@@ -59,7 +60,7 @@ public class ExpirationReceiver extends BroadcastReceiver {
         builder.setDeleteIntent(pi);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
 
         // Refresh this notification every minute
         Intent notificationReceiverIntent = new Intent(context, ExpirationReceiver.class);
