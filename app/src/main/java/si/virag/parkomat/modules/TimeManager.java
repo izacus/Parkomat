@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import org.threeten.bp.Instant;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.temporal.ChronoField;
 import org.threeten.bp.temporal.ChronoUnit;
@@ -40,10 +37,10 @@ public class TimeManager {
             public void call(final Subscriber<? super LocalTime> subscriber) {
                 TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+                    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
                         LocalTime instant = LocalTime.now()
-                                                     .with(ChronoField.HOUR_OF_DAY, hourOfDay)
-                                                     .with(ChronoField.MINUTE_OF_HOUR, minute);
+                                .with(ChronoField.HOUR_OF_DAY, hourOfDay)
+                                .with(ChronoField.MINUTE_OF_HOUR, minute);
                         subscriber.onNext(instant);
                     }
                 };
