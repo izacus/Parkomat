@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.functions.Action1;
@@ -25,16 +25,16 @@ import si.virag.parkomat.modules.CarsManager;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    @Bind(R.id.welcome_addcar_container)
+    @BindView(R.id.welcome_addcar_container)
     public View containerAddCar;
 
-    @Bind(R.id.welcome_disclaimer_container)
+    @BindView(R.id.welcome_disclaimer_container)
     public View containerDisclaimer;
 
-    @Bind(R.id.welcome_carname)
+    @BindView(R.id.welcome_carname)
     public EditText edtCarName;
 
-    @Bind(R.id.welcome_carplate)
+    @BindView(R.id.welcome_carplate)
     public EditText edtCarPlate;
 
     @Inject

@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
@@ -32,10 +32,10 @@ import si.virag.parkomat.modules.CarsManager;
 
 public class CarManagerActivity extends AppCompatActivity implements CarListAdapter.OnCarClickedListener {
 
-    @Bind(R.id.carmanager_container)
+    @BindView(R.id.carmanager_container)
     protected View container;
 
-    @Bind(R.id.carmanager_list)
+    @BindView(R.id.carmanager_list)
     protected RecyclerView carList;
 
     @Inject

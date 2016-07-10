@@ -25,7 +25,7 @@ import org.threeten.bp.temporal.ChronoUnit;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.Icepick;
@@ -47,21 +47,21 @@ public class MainActivity extends AppCompatActivity {
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm ").withZone(ZoneId.systemDefault());
     public static final String PREF_WELCOME_DONE = "Welcome.Wizard.Done";
 
-    @Bind(R.id.main_container)
+    @BindView(R.id.main_container)
     View container;
 
-    @Bind(R.id.main_registration_plate)
+    @BindView(R.id.main_registration_plate)
     TextView registrationPlate;
-    @Bind(R.id.main_car_name)
+    @BindView(R.id.main_car_name)
     TextView carName;
-    @Bind(R.id.main_parking_zone_txt)
+    @BindView(R.id.main_parking_zone_txt)
     TextView zoneName;
-    @Bind(R.id.main_parking_time_txt)
+    @BindView(R.id.main_parking_time_txt)
     TextView timeName;
-    @Bind(R.id.main_parking_zone_info)
+    @BindView(R.id.main_parking_zone_info)
     TextView zoneInfo;
 
-    @Bind(R.id.main_button_pay)
+    @BindView(R.id.main_button_pay)
     Button payButton;
 
     @Inject
